@@ -1,0 +1,31 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python caches and tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Raw datasets
+data/raw/*.csv
+data/raw/**/*.csv
+
+# Generated artifacts and models
+artifacts/
+models/
+*.cbm
+*.joblib
+*.pkl
+
+# IDE and operating-system files
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
