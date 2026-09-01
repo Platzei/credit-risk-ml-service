@@ -14,7 +14,7 @@ The planned workflow covers reproducible data loading, leakage-safe preprocessin
 
 ## Current status
 
-Only the initial repository and Python package skeleton exists. Data loading, exploration, preprocessing, model training, evaluation, serving, containerization, and CI have not been implemented.
+Data loading, baseline training and evaluation, CatBoost model persistence, and a minimal FastAPI inference service are implemented. Containerization and CI have not been implemented.
 
 ## Local setup
 
@@ -27,4 +27,34 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-Place the Kaggle training CSV at `data/raw/cs-training.csv` when data work begins.
+Place the Kaggle training CSV at `data/raw/cs-training.csv`, then train the model and create the ignored artifacts:
+
+```powershell
+python -m credit_risk.train
+```
+
+Start the inference service after the artifacts have been created:
+
+```powershell
+python -m uvicorn credit_risk.api:app --reload
+```
+
+## Docker
+
+Build the inference image from the existing model artifacts:
+
+```powershell
+docker build -t credit-risk-ml-service .
+```
+
+Run the container:
+
+```powershell
+docker run --rm -p 8000:8000 credit-risk-ml-service
+```
+
+Open the interactive API documentation at [http://localhost:8000/docs](http://localhost:8000/docs). Check service health with:
+
+```powershell
+curl.exe http://localhost:8000/health
+```
