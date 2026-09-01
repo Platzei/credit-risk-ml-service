@@ -2,7 +2,10 @@
 
 # Credit Risk ML Service
 
-Сервис оценки риска серьезной кредитной просрочки на датасете Kaggle **Give Me Some Credit**. Репозиторий включает загрузку данных, обучение и оценку моделей, сохранение CatBoost, API на FastAPI, Docker, тесты и CI.
+[![CI](https://github.com/Platzei/credit-risk-ml-service/actions/workflows/ci.yml/badge.svg)](https://github.com/Platzei/credit-risk-ml-service/actions/workflows/ci.yml)
+![Python 3.14](https://img.shields.io/badge/python-3.14-blue.svg)
+
+Сервис оценки риска серьезной кредитной просрочки на датасете Kaggle **Give Me Some Credit**. Репозиторий включает загрузку данных, обучение и оценку моделей, сохранение CatBoost, FastAPI, Docker, тесты и CI.
 
 Стек: Python 3.14, pandas, scikit-learn, CatBoost, FastAPI, Pydantic, Docker, pytest, Ruff и GitHub Actions.
 
@@ -73,13 +76,31 @@ python -m credit_risk.train
 
 ## API
 
-Модель и metadata загружаются один раз при старте приложения. Поля `MonthlyIncome` и `NumberOfDependents` могут быть `null`.
+Модель и метадата загружаются один раз при старте приложения. Поля `MonthlyIncome` и `NumberOfDependents` могут быть `null`.
 
 ```powershell
 python -m uvicorn credit_risk.api:app --reload
 ```
 
 Endpoints: `GET /health`, `POST /predict`; Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs).
+
+Пример запроса к `POST /predict` из PowerShell:
+
+```powershell
+curl.exe -X POST "http://localhost:8000/predict" `
+  -H "Content-Type: application/json" `
+  -d '{"RevolvingUtilizationOfUnsecuredLines":0.42,"age":45,"NumberOfTime30-59DaysPastDueNotWorse":1,"DebtRatio":0.35,"MonthlyIncome":null,"NumberOfOpenCreditLinesAndLoans":8,"NumberOfTimes90DaysLate":0,"NumberRealEstateLoansOrLines":1,"NumberOfTime60-89DaysPastDueNotWorse":0,"NumberOfDependents":null}'
+```
+
+Пример ответа:
+
+```json
+{
+  "serious_delinquency_probability": 0.052092103518956386,
+  "high_risk": false,
+  "threshold": 0.09
+}
+```
 
 ## Docker
 
@@ -105,7 +126,7 @@ GitHub Actions запускает pytest и Ruff с Python 3.14 при push в `
 - Датасет не содержит реальных финансовых потерь и полного контекста кредитования.
 - Условные стоимости не отражают реальную экономику банка, а порог `0.09` не является готовой кредитной политикой.
 - Модель не подходит для реальных кредитных решений без дополнительной валидации, анализа справедливости, управления моделью, проверки безопасности и экспертизы в предметной области.
-- В API нет authentication, database и monitoring.
+- В API нет аутентификации, базы данных и мониторинга.
 
 ---
 
@@ -113,7 +134,7 @@ GitHub Actions запускает pytest и Ruff с Python 3.14 при push в `
 
 # Credit Risk ML Service — English version
 
-Credit delinquency risk service built on Kaggle's **Give Me Some Credit** dataset. The repository contains model training and evaluation, persisted CatBoost artifacts, a FastAPI API, Docker support, pytest and Ruff checks, and GitHub Actions CI. It uses Python 3.14, pandas, scikit-learn, CatBoost, FastAPI, and Pydantic.
+Credit delinquency risk service built on Kaggle's **Give Me Some Credit** dataset. The repository contains model training and evaluation, persisted CatBoost artifacts, a FastAPI, Docker support, pytest and Ruff checks, and GitHub Actions CI. It uses Python 3.14, pandas, scikit-learn, CatBoost, FastAPI, and Pydantic.
 
 ## Results
 
@@ -145,6 +166,8 @@ python -m uvicorn credit_risk.api:app --reload
 ```
 
 The API exposes `GET /health`, `POST /predict`, and [http://localhost:8000/docs](http://localhost:8000/docs).
+
+The copy-paste `curl.exe` example in the Russian API section calls the same `POST /predict` endpoint with all ten model features.
 
 Build only after `artifacts/` exists locally:
 
