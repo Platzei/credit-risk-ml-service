@@ -19,6 +19,7 @@ data/raw/**/*.csv
 # Generated artifacts and models
 artifacts/
 models/
+catboost_info/
 *.cbm
 *.joblib
 *.pkl
@@ -29,3 +30,5 @@ models/
 *.swp
 .DS_Store
 Thumbs.db
+
+*.egg-info/

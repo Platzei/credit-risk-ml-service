@@ -2,7 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
-DEFAULT_DATA_PATH = Path("data/raw/cs-training.csv")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "cs-training.csv"
 TARGET_COLUMN = "SeriousDlqin2yrs"
 
 
@@ -14,6 +15,7 @@ def load_data(path: str | Path = DEFAULT_DATA_PATH) -> pd.DataFrame:
         raise FileNotFoundError(f"Credit data file not found: {data_path}")
 
     data = pd.read_csv(data_path)
+
     unnamed_columns = [
         column for column in data.columns if str(column).startswith("Unnamed:")
     ]
